@@ -4,9 +4,9 @@ import com.matheus.custodio.projeto.entities.User;
 import com.matheus.custodio.projeto.repositories.UserRepository;
 import com.matheus.custodio.projeto.services.exceptions.DatabaseException;
 import com.matheus.custodio.projeto.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User findByid(Long id){
+    public User findById(Long id){
         Optional<User> user = userRepository.findById(id);
         return user.orElseThrow(()-> new ResourceNotFoundException(id));
     }
@@ -39,9 +39,13 @@ public class UserService {
     }
 
     public User update(Long id, User obj){
-        User entity = userRepository.getReferenceById(id);
-        updateData(entity, obj);
-        return userRepository.save(entity);
+        try {
+            User entity = userRepository.getReferenceById(id);
+            updateData(entity, obj);
+            return userRepository.save(entity);
+        }catch(EntityNotFoundException e){
+            throw new ResourceNotFoundException(e.getMessage());
+        }
     }
 
     private void updateData(User entity, User obj) {

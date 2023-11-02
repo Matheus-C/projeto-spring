@@ -2,7 +2,6 @@ package com.matheus.custodio.projeto.resources;
 
 import com.matheus.custodio.projeto.entities.User;
 import com.matheus.custodio.projeto.services.UserService;
-import jakarta.persistence.PostUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +21,8 @@ public class UserResource {
         return ResponseEntity.ok().body(users);
     }
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findByid(@PathVariable Long id){
-        User obj = userService.findByid(id);
+    public ResponseEntity<User> findById(@PathVariable Long id){
+        User obj = userService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
