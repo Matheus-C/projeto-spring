@@ -2,8 +2,11 @@ package com.matheus.custodio.projeto.services;
 
 import com.matheus.custodio.projeto.entities.User;
 import com.matheus.custodio.projeto.repositories.UserRepository;
+import com.matheus.custodio.projeto.services.exceptions.DatabaseException;
 import com.matheus.custodio.projeto.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +31,11 @@ public class UserService {
     }
 
     public void delete(Long id){
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        }catch (DataIntegrityViolationException e){
+            throw new DatabaseException(e.getMessage());
+        }
     }
 
     public User update(Long id, User obj){
