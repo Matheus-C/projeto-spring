@@ -2,6 +2,7 @@ package com.matheus.custodio.projeto.resources;
 
 import com.matheus.custodio.projeto.entities.User;
 import com.matheus.custodio.projeto.services.UserService;
+import jakarta.persistence.PostUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +39,11 @@ public class UserResource {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj){
+        obj = userService.update(id, obj);
+        return ResponseEntity.ok().body(obj);
     }
 }
